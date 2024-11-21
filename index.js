@@ -15,15 +15,25 @@ function connect(){
     }
 
     connection.onmessage = (event)=>{
+        console.log(event.data);
         recordResponse(event.data);
     }
 }
 
 function sendEcho(){
     const msg = {
-        "messageType": "echo", 
-        "ticker": "newOne",
-        "price": 11.5
+        "messageType": document.getElementById("msgType").value, 
+        "ticker": document.getElementById("ticker").value,
+        "price": document.getElementById("price").value
+    }
+
+    connection.send(JSON.stringify(msg));
+    console.log("Finish sending echo");
+}
+
+function retrieveOrder(){
+    const msg = {
+        "messageType": "retrieveOrder"
     }
 
     connection.send(JSON.stringify(msg));
