@@ -5,42 +5,46 @@
     </head>
     <body style="margin: 10px;">
         <h1> Khang Exchange </h1>
+        <h2> Source: </h2>
+        <h2 id="myBalance"></h2>
         <button class="btn btn-primary" onclick="connect()"> Connect </button>
 
         <form style="margin: 10px; width: 80%;" onsubmit="event.preventDefault()">
             <h3> Order/Message request </h3>
             <div class="input-group mb-3">
-                <input id="msgType" type="text" class="form-control" placeholder="Message type">
+                <input id="userId" value="1" type="text" class="form-control" placeholder="User Id">
             </div>
             <div class="input-group mb-3">
-                <input id="userId" type="text" class="form-control" placeholder="User Id">
+                <input id="msgType" value="order" type="text" class="form-control" placeholder="Message type">
             </div>
             <div class="input-group mb-3">
-                <input id="orderId" type="text" class="form-control" placeholder="Order Id">
+                <input id="orderId" value="1-1" type="text" class="form-control" placeholder="Order Id">
             </div>
             <div class="input-group mb-3">
-                <input id="ticker" type="text" class="form-control" placeholder="Ticker">
+                <input id="ticker" value="check" type="text" class="form-control" placeholder="Ticker">
             </div>
             <div class="input-group mb-3">
-                <input id="price" type="number" class="form-control" placeholder="Price">
+                <input id="price" value="100" type="number" class="form-control" placeholder="Price">
             </div>
             <div class="input-group mb-3">
-                <input id="amount" type="number" class="form-control" placeholder="Amount">
+                <input id="amount" value="10" type="number" class="form-control" placeholder="Amount">
             </div>
             <div class="input-group mb-3">
-                <select class="custom-select" id="inlineFormCustomSelect">
+                <select id="sell" class="custom-select" id="inlineFormCustomSelect">
                     <option value="true">true</option>
                     <option value="false">false</option>
                 </select>
             </div>
         </form>
-        <button class="btn btn-primary" onclick="sendEcho()"> Echo </button>
         <button class="btn btn-primary" onclick="retrieveOrder()"> RetrieveOrder </button>
+        <button class="btn btn-primary" onclick="sendOrder()"> SendOrder </button>
+        <button class="btn btn-primary" onclick="getBalance()"> GetBalance </button>
 
-
-        
         
         <p id="response"></p>
+
+        <table id="orderBook" >
+        </table>
 
 
 
