@@ -9,7 +9,9 @@ function connect(){
         connection.close();
     }
 
-    connection = new WebSocket("ws://localhost:8080");
+    let url = document.getElementById("serverUrl").value;
+    connection = new WebSocket(url);
+    console.log(connection)
     console.log("Start listening");
     
     connection.onopen = (event) => {
@@ -17,21 +19,12 @@ function connect(){
     }
 
     connection.onmessage = (event)=>{
-        console.log(event.data);
         recordResponse(event.data);
         recordState(event.data);
     }
 }
 
-function retrieveOrder(){
-    const msg = {
-        "messageType": "retrieveOrder"
-    }
-
-    connection.send(JSON.stringify(msg));
-}
-
-function sendOrder(){
+function sendRequest(){
     const msg = {
         "messageType": document.getElementById("msgType").value,
         "userId": document.getElementById("userId").value,
@@ -62,12 +55,18 @@ function recordState(dataStr){
     
     if (type == "getBalance"){
         document.getElementById("myBalance").innerHTML = data["value"];
+    } else if (type == "retrieveSummary"){
+        createOrderTable(data["value"]);
     }
 }
 
 // Interval polling
 function getBalance(){
     if (connection == null){
+        return;
+    }
+
+    if (connection.readyState != WebSocket.OPEN){
         return;
     }
 
@@ -85,6 +84,64 @@ function getBalance(){
     connection.send(JSON.stringify(msg));
 }
 
+// Create order table
+function getOrderSummary(){
+    if (connection == null){
+        return;
+    }
+
+    if (connection.readyState != WebSocket.OPEN){
+        return;
+    }
+
+    msg = {
+        "messageType": "retrieveSummary",
+    }
+
+    // console.log(msg);
+    connection.send(JSON.stringify(msg));
+}
+
+function createOrderTable(summaryObj){
+    let table = document.getElementById("orderBook");
+    table.innerHTML = "";
+
+    let headerRow = table.insertRow(0);
+    headerRow.insertCell(0).outerHTML = "<th>Buy Volume</th>";
+    headerRow.insertCell(1).outerHTML = "<th>Price</th>";
+    headerRow.insertCell(2).outerHTML = "<th>Sell Volume</th>";
+
+    let buySide = summaryObj["buySide"];
+    let sellSide = summaryObj["sellSide"];
+
+    let combined = [];
+    for (let i=0; i < buySide.length; i+=2){
+        combined.push([buySide[i], buySide[i+1], 1]);
+    }
+
+    for (let i=0; i < sellSide.length; i+=2){
+        combined.push([sellSide[i], sellSide[i+1], -1]);
+    }
+
+    combined.sort((a, b) => (b[0] - a[0]));
+
+    for (let i=0; i < combined.length; i++){
+        let row = table.insertRow(i + 1);
+        let buy = row.insertCell(0);
+        row.insertCell(1).innerHTML = combined[i][0];
+        let sell = row.insertCell(2);
+        if (combined[i][2] == 1){
+            buy.innerHTML = combined[i][1];
+        } else {
+            sell.innerHTML = combined[i][1];
+        }
+        
+    }
+
+}
+
 window.setInterval(() => {
     getBalance();
+    getOrderSummary();
 }, 1000);
+
