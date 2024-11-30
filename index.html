@@ -19,8 +19,14 @@
             <div class="input-group mb-3">
                 <input id="userId" value="1" type="text" class="form-control" placeholder="User Id">
             </div>
+            <p> Message type: </p>
             <div class="input-group mb-3">
-                <input id="msgType" value="order" type="text" class="form-control" placeholder="Message type">
+                <select id="msgType" class="custom-select" id="inlineFormCustomSelect">
+                    <option value="order"> order </option>
+                    <option value="removeOrder"> removeOrder </option>
+                    <option value="getBalance"> getBalance </option>
+                    <option value="echo"> echo </option>
+                </select>
             </div>
             <div class="input-group mb-3">
                 <input id="orderId" value="1-1" type="text" class="form-control" placeholder="Order Id">
@@ -43,8 +49,6 @@
             </div>
         </form>
         <button class="btn btn-primary" onclick="sendRequest()"> SendRequest </button>
-        <button class="btn btn-primary" onclick="getBalance()"> GetBalance </button>
-
         
         <p id="response"></p>
 
