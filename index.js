@@ -143,5 +143,5 @@ function createOrderTable(summaryObj){
 window.setInterval(() => {
     getBalance();
     getOrderSummary();
-}, 1000);
+}, 3000);
 
